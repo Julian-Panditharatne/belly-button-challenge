@@ -3,20 +3,27 @@ function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
-
+    let metaData = data.metadata;
 
     // Filter the metadata for the object with the desired sample number
-
+    let sampleMetaData = metaData.filter((obj) => {
+      if (obj.id === +sample) { // Convert sample to a number for comparison using the unary plus(+) operator. 
+        return obj;
+      }
+    })[0]; // get the single metadata object from within the filtered metadata array.
+    console.log(sampleMetaData);
 
     // Use d3 to select the panel with id of `#sample-metadata`
-
+    let metaPanel = d3.select('#sample-metadata');
 
     // Use `.html("") to clear any existing metadata
-
+    metaPanel.html("");
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
-
+    Object.entries(sampleMetaData).map(([key, value], index) => {
+      metaPanel.append('p').attr("class", "card-text").text(`${key.toUpperCase()}: ${value} \n`);
+    });
   });
 }
 
@@ -65,23 +72,25 @@ function init() {
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
     let namesComprehension = names.map((name) => {
-      dropdownMenu.append("option").text(name);
-      return name;
+      dropdownMenu.append("option").attr("value", name).text(name); // Add the name as one of the select options
+      return +name; // Add the name to namesComprehension after converting it to a number using the unary plus(+) operator.
     });
 
     // Get the first sample from the list
-    firstSample = namesComprehension[0]
-    console.log(`the first sample: ${firstSample}.`)
+    firstSample = namesComprehension[0];
+    console.log(`the first sample: ${firstSample}.`);
+    console.log(`first sample data type: ${typeof firstSample}`);
 
     // Build charts and metadata panel with the first sample
-
+    buildMetadata(firstSample);
+    // buildCharts(firstSample);
   });
 }
 
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
-
+  buildMetadata(newSample);
 }
 
 // Initialize the dashboard

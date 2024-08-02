@@ -70,27 +70,32 @@ function buildCharts(sample) {
     // Render the Bubble Chart
     Plotly.newPlot('bubble', bubbleData, bubbleLayout);
 
-    // Loop through all the samplesData and sort the sample_values and see if its values are in the same order as the unsorted sample_values.
-    let isSorted = samplesData.map((sampData) => {
-      let sortedSampVals = sampData.sample_values.sort((a, b) => b - a); // sort the array and save it as another array
-      // return true if all the values of both the sorted and unsorted arrays are in the same exact position, false otherwise.
-      return sortedSampVals.every((val, ind) => val===sampData.sample_values[ind]);
-    });
-
-    console.log("Are all the sample values already sorted?")
-    console.log(isSorted)
-
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-    let otuIDsStrings = otuIDs.map((idOTU) => {
+    let otuIDsStrings = otuIDs.map((idOTU) => { // Don't forget to slice and reverse the input data appropriately
       return `OTU ${idOTU}`;
-    });
+    }).slice(0,10).reverse();
+
+    // Don't forget to slice and reverse the input data appropriately
+    let barOTULabels = otuLabels.slice(0,10).reverse();
+    let barSampleValues = sampleValues.slice(0,10).reverse();
 
     // Build a Bar Chart
-    // Don't forget to slice and reverse the input data appropriately
+    let barData = [{
+      type: 'bar',
+      orientation: 'h',
+      x: barSampleValues,
+      y: otuIDsStrings,
+      text: barOTULabels,
+      name: 'Top Bacteria Numbers'
+    }];
 
+    let barLayout = {
+      title: 'Top 10 Bacteria Cultures Found',
+      xaxis: {title: 'Number of Bacteria'}
+    };
 
     // Render the Bar Chart
-
+    Plotly.newPlot('bar', barData, barLayout);
   });
 }
 

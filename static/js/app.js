@@ -7,7 +7,7 @@ function buildMetadata(sample) {
 
     // Filter the metadata for the object with the desired sample number
     let sampleMetaData = metaData.filter((obj) => {
-      if (obj.id === +sample) { // Convert sample to a number for comparison using the unary plus(+) operator. 
+      if (obj.id === sample) {
         return obj;
       }
     })[0]; // get the single metadata object from within the filtered metadata array.
@@ -32,22 +32,50 @@ function buildCharts(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // Get the samples field
-
+    let samplesData = data.samples;
 
     // Filter the samples for the object with the desired sample number
+    let dataSample = samplesData.filter((obj) => { 
+      if (+obj.id === sample) { // Convert sample to a number for comparison using the unary plus(+) operator.
+        return obj;
+      }
+    })[0];
 
+    console.log(dataSample);
 
     // Get the otu_ids, otu_labels, and sample_values
-
+    let otuIDs = dataSample.otu_ids;
+    let otuLabels = dataSample.otu_labels;
+    let sampleValues = dataSample.sample_values;
 
     // Build a Bubble Chart
+    let bubbleData = [{
+      x: otuIDs,
+      y: sampleValues,
+      text: otuLabels,
+      mode: 'markers',
+      type: 'bubble',
+      marker: {
+        color: otuIDs,
+        size: sampleValues
+      }
+    }];
 
+    let bubbleLayout = {
+      title: 'Bacteria Cultures Sample',
+      xaxis: {title:'OTU ID'},
+      yaxis: {title:'Number of Bacteria'}
+    };
 
     // Render the Bubble Chart
+    Plotly.newPlot('bubble', bubbleData, bubbleLayout);
 
+    // 
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
-
+    let otuIDsStrings = otuIDs.map((idOTU) => {
+      return `OTU ${idOTU}`;
+    });
 
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
@@ -83,14 +111,15 @@ function init() {
 
     // Build charts and metadata panel with the first sample
     buildMetadata(firstSample);
-    // buildCharts(firstSample);
+    buildCharts(firstSample);
   });
 }
 
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
-  buildMetadata(newSample);
+  buildMetadata(+newSample); // Convert sample to a number for comparison using the unary plus(+) operator.
+  buildCharts(+newSample); // Convert sample to a number for comparison using the unary plus(+) operator.
 }
 
 // Initialize the dashboard

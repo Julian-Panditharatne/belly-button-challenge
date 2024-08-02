@@ -70,7 +70,15 @@ function buildCharts(sample) {
     // Render the Bubble Chart
     Plotly.newPlot('bubble', bubbleData, bubbleLayout);
 
-    // 
+    // Loop through all the samplesData and sort the sample_values and see if its values are in the same order as the unsorted sample_values.
+    let isSorted = samplesData.map((sampData) => {
+      let sortedSampVals = sampData.sample_values.sort((a, b) => b - a); // sort the array and save it as another array
+      // return true if all the values of both the sorted and unsorted arrays are in the same exact position, false otherwise.
+      return sortedSampVals.every((val, ind) => val===sampData.sample_values[ind]);
+    });
+
+    console.log("Are all the sample values already sorted?")
+    console.log(isSorted)
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
     let otuIDsStrings = otuIDs.map((idOTU) => {

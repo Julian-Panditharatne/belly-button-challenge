@@ -10,11 +10,31 @@ The interactive dashboard was built in the following manner:
 
 - Created a bubble chart that displays each bacteria sample.
 
+- Displayed the individual's demographic information.
+
+- Updated all the plots when a new individual is selected.
+
+- Deployed the dashboard to the free static page hosting service, GitHub Pages.
+
 ---
 
 ## **Repository Files and Folders**
 
-Besides this `README.md` file, there are x files and y folder(s).
+Besides this `README.md` file, there are five files and two folders.
+
+The following three files are not within either of the two folders:
+
+- `index.html`: the html file used to create the interactive dashboard.
+
+- `indexStarter.html`: the html file that was intially provided for the challenge.
+
+- `samples.json`: The JSON file containing a local copy of the data - provided as a reference - that is explored in the interactive dashboard.
+
+The remaining two files are within the folder named **js**, which itself is within the other folder, named **static**:
+
+- `app.js`: The JavaScript file used to create all the interactive elements within the dashboard using the data in `samples.json`.
+
+- `appStarter.js`: The JavaScript file that was initially provided for the challenge.
 
 ---
 
